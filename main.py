@@ -118,8 +118,8 @@ def remove_duplicates_from_csv(csv_file_path):
         # Calculate the number of duplicates removed
         duplicate_count = initial_row_count - len(df)
 
-        print(
-            f'{duplicate_count} duplicates removed from CSV file "{csv_file_path}" successfully.')
+        print(f'{duplicate_count} duplicates removed from CSV file '
+              f' "{csv_file_path}" successfully.')
         return duplicate_count
 
     except FileNotFoundError:
@@ -129,18 +129,24 @@ def remove_duplicates_from_csv(csv_file_path):
 
 def main():
     """
-    Vehicle Positions: http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
-    Trip Updates: http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
-    Alerts: http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Alert/Alerts.pb
-    Documentation: https://www.transit.land/feeds/f-ets~rt
+    Vehicle Positions:
+        http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+    Trip Updates:
+        http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+    Alerts:
+        http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Alert/Alerts.pb
+    Documentation:
+        https://www.transit.land/feeds/f-ets~rt
 
-    Example Code: https://nbviewer.org/url/nikhilvj.co.in/files/gtfsrt/locations.ipynb
-    Travel Time: https://docs.traveltime.com/api/overview/introduction
-    MBTA: https://github.com/mbta/gtfs-documentation/blob/master/reference/gtfs-realtime.md
+    Example Code:
+        https://nbviewer.org/url/nikhilvj.co.in/files/gtfsrt/locations.ipynb
+    Travel Time:
+        https://docs.traveltime.com/api/overview/introduction
+    MBTA:
+        https://github.com/mbta/gtfs-documentation/blob/master/reference/gtfs-realtime.md
     """
-
-    dict_obj = read_pb(
-        'http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb')
+    BASE_URL = "http://gtfs.edmonton.ca/TMGTFSRealTimeWebService"
+    dict_obj = read_pb(f'{BASE_URL}/TripUpdate/TripUpdates.pb')
     lastUpdate = dict_obj["header"]["timestamp"]
     print(f'Last Update: {convert_posix_to_mst(int(lastUpdate))}')
     # print(json.dumps(dict_obj["entity"][0],indent=4))

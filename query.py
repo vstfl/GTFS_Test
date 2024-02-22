@@ -4,16 +4,18 @@ import pandas as pd
 Main file for querying/sorting data to be used in GIS software
 
 Objectives: Develop the functions:
-1. Take all rows of same stopid at a given time interval, take an absolute average of all delays at stop,
-bundle with co-ords and then output [DONE]
+1. Take all rows of same stopid at a given time interval, take an absolute
+average of all delays at stop, bundle with co-ords and then output [DONE]
 - each stopid should be unique in final file
 
-2. Take all rows of same stopid at a given time interval, bundle co-ords, average delay, and id, then output
+2. Take all rows of same stopid at a given time interval, bundle co-ords,
+average delay, and id, then output
 - each stopid can have multiple entries corresponding to each trip (id)
 - not exactly required, probably can implement within tableau
 
 3. Develop a function that removes all rows not within time range [DONE]
-4. Develop a function that takes associated stopid and bundles with a co-ordinate [DONE]
+4. Develop a function that takes associated stopid and bundles with a
+co-ordinate [DONE]
 
 # Can use this data to connect what causes delays to factors i.e.:
 - Proximity to schools, demand in area, road density
@@ -40,10 +42,11 @@ def filter_dataframe_by_time(df, start_times, time_range, date_list):
                            pd.to_datetime(date).date()]
 
             # Filter rows within the specified time range
+            minutes = date_rows['datetime'].dt.hour * \
+                60 + date_rows['datetime'].dt.minute
             time_range_rows = date_rows[
-                (date_rows['datetime'].dt.hour * 60 + date_rows['datetime'].dt.minute >= start_time_minutes) &
-                (date_rows['datetime'].dt.hour * 60 +
-                 date_rows['datetime'].dt.minute < start_time_minutes + time_range)
+                (minutes >= start_time_minutes) &
+                (minutes < start_time_minutes + time_range)
             ]
 
             # Append the filtered rows to the list
@@ -65,11 +68,13 @@ def aggregate_stop_data(input_df):
     # Take the absolute value of 'averagedelay'
     input_df['averagedelay_abs'] = input_df['averagedelay'].abs()
 
-    # Group by 'stopid' and calculate the average absolute delay, average timestamp, and count of entries
+    # Group by 'stopid' and calculate the average absolute delay, average
+    # timestamp, and count of entries
     aggregated_df = input_df.groupby('stopid').agg({
         'averagedelay_abs': 'mean',
         'timestamp': 'mean',
-        'id': 'count'  # Use a different name for the count column, e.g., 'entry_count'
+        # Use a different name for the count column, e.g., 'entry_count'
+        'id': 'count'
     }).reset_index()
 
     # Convert 'timestamp' back to Unix timestamp for consistency
@@ -94,7 +99,8 @@ def merge_coordinates(df1, df2):
     # Create a duplicate of the original DataFrame
     result_df = df1.copy()
 
-    # Add 'latitude' and 'longitude' columns using the data from the second DataFrame
+    # Add 'latitude' and 'longitude' columns
+    # using the data from the second DataFrame
     result_df['latitude'] = merged_df['stop_lat']
     result_df['longitude'] = merged_df['stop_lon']
 
@@ -119,14 +125,13 @@ def main():
 
     filtered_df = filter_dataframe_by_time(
         df, start_time, time_range, date_list)
-    overview_df = aggregate_stop_data(filtered_df)
-    overview_w_coords = merge_coordinates(overview_df, bus_stops)
 
     print(filtered_df)
-    # print(overview_w_coords)
-
     export_to_csv(filtered_df, 'data/TIMEFILTER.csv')
 
+    overview_df = aggregate_stop_data(filtered_df)
+    overview_w_coords = merge_coordinates(overview_df, bus_stops)
+    # print(overview_w_coords)
     # export_to_csv(overview_w_coords, 'OVERALL_TEST.csv')
 
 

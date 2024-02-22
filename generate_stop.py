@@ -48,8 +48,8 @@ def export_dict_to_json(dict_obj, output_json_file):
         with open(output_json_file, 'w') as json_file:
             json_file.write(json_data)
 
-        print(
-            f'Dictionary exported to JSON file "{output_json_file}" successfully.')
+        print('Dictionary exported to JSON file'
+              f' "{output_json_file}" successfully.')
 
     except Exception as e:
         print(f"An error occurred during export: {e}")
@@ -62,15 +62,16 @@ def export_dict_to_csv(dict_obj, output_csv_file):
 
     try:
         # Convert the dictionary to a DataFrame
-        result_df = pd.DataFrame.from_dict({(i, j): dict_obj[i][j]
-                                            for i in dict_obj.keys()
-                                            for j in range(len(dict_obj[i]))}, orient='index')
+        result_df = pd.DataFrame.from_dict(
+            {(i, j): dict_obj[i][j]
+             for i in dict_obj.keys()
+             for j in range(len(dict_obj[i]))}, orient='index')
 
         # Export the DataFrame to a new CSV file
         result_df.to_csv(output_csv_file, index=False)
 
-        print(
-            f'Dictionary exported to CSV file "{output_csv_file}" successfully.')
+        print('Dictionary exported to CSV file'
+              f' "{output_csv_file}" successfully.')
 
     except Exception as e:
         print(f"An error occurred during export: {e}")
@@ -102,8 +103,8 @@ def convert_dict_to_csv(dict_obj, output_csv_file):
         # Export the DataFrame to a CSV file
         df.to_csv(output_csv_file, index=False)
 
-        print(
-            f'Dictionary exported to CSV file "{output_csv_file}" successfully.')
+        print('Dictionary exported to CSV file'
+              f' "{output_csv_file}" successfully.')
 
     except Exception as e:
         print(f"An error occurred during export: {e}")
@@ -123,7 +124,8 @@ def average_delay_by_id2(dict_obj):
 
     # Iterate through each bus stop in the dictionary
     for stopid, entries in dict_obj.items():
-        id_values = set()  # To track unique "id" values for the current bus stop
+        # To track unique "id" values for the current bus stop
+        id_values = set()
         # To store the sum of "delay" for each "id"
         id_delay_sum = defaultdict(float)
         # To store the count of entries for each "id"
@@ -148,14 +150,18 @@ def average_delay_by_id2(dict_obj):
 
         # Calculate the average "delay" for each "id" at the current bus stop
         average_delays = {
-            id_value: id_delay_sum[id_value] / id_count[id_value] for id_value in id_values}
+            id_value: id_delay_sum[id_value] / id_count[id_value]
+            for id_value in id_values
+        }
 
         # Create a new entry in the aggregated dictionary for the current bus stop
         aggregated_dict[stopid] = [{
-            'routeid': [entry['routeid'] for entry in entries if entry['id'] == entry_id][0],
+            'routeid': [entry['routeid']
+                        for entry in entries if entry['id'] == entry_id][0],
             'averagedelay': average_delays[entry_id],
             'id': entry_id,
-            'timestamp': [entry['lastupdate'] for entry in entries if entry['id'] == entry_id][0],
+            'timestamp': [entry['lastupdate']
+                          for entry in entries if entry['id'] == entry_id][0],
         } for entry_id in id_values]
 
         # Update the new size
