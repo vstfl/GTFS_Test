@@ -16,7 +16,8 @@ def check_duplicates(csv_file_path):
         duplicate_count = len(duplicate_rows)
 
         if duplicate_count > 0:
-            print(f'{duplicate_count} duplicates found in CSV file "{csv_file_path}".')
+            print(
+                f'{duplicate_count} duplicates found in CSV file "{csv_file_path}".')
             print('Duplicate Rows:')
             print(duplicate_rows)
         else:
@@ -31,5 +32,5 @@ def check_duplicates(csv_file_path):
 
 if __name__ == '__main__':
 
-    csv_file_path = 'final_csv.txt'  # Replace with your CSV file path
+    csv_file_path = 'data/final_csv.txt'  # Replace with your CSV file path
     check_duplicates(csv_file_path)

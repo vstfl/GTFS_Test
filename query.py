@@ -36,12 +36,14 @@ def filter_dataframe_by_time(df, start_times, time_range, date_list):
             df['datetime'] = pd.to_datetime(df['timestamp'], unit='s')
 
             # Filter rows for the specific date
-            date_rows = df[df['datetime'].dt.date == pd.to_datetime(date).date()]
+            date_rows = df[df['datetime'].dt.date ==
+                           pd.to_datetime(date).date()]
 
             # Filter rows within the specified time range
             time_range_rows = date_rows[
                 (date_rows['datetime'].dt.hour * 60 + date_rows['datetime'].dt.minute >= start_time_minutes) &
-                (date_rows['datetime'].dt.hour * 60 + date_rows['datetime'].dt.minute < start_time_minutes + time_range)
+                (date_rows['datetime'].dt.hour * 60 +
+                 date_rows['datetime'].dt.minute < start_time_minutes + time_range)
             ]
 
             # Append the filtered rows to the list
@@ -71,7 +73,8 @@ def aggregate_stop_data(input_df):
     }).reset_index()
 
     # Convert 'timestamp' back to Unix timestamp for consistency
-    aggregated_df['timestamp'] = aggregated_df['timestamp'].astype('int64') // 10**9
+    aggregated_df['timestamp'] = aggregated_df['timestamp'].astype(
+        'int64') // 10**9
 
     # Rename the count column to 'entry_count'
     aggregated_df.rename(columns={'id': 'entry_count'}, inplace=True)
@@ -85,7 +88,8 @@ def merge_coordinates(df1, df2):
     df2['stop_id'] = df2['stop_id'].astype(str)
 
     # Merge the two DataFrames on 'stopid' and 'stop_id'
-    merged_df = pd.merge(df1, df2, left_on='stopid', right_on='stop_id', how='left')
+    merged_df = pd.merge(df1, df2, left_on='stopid',
+                         right_on='stop_id', how='left')
 
     # Create a duplicate of the original DataFrame
     result_df = df1.copy()
@@ -103,25 +107,27 @@ def export_to_csv(df, file_path):
 
 
 def main():
-    file_path = 'final_csv.txt'
+    file_path = 'data/final_csv.txt'
 
     df = pd.read_csv(file_path, delimiter=',')
-    bus_stops = pd.read_csv('ETS_Bus_Schedule_GTFS_Data_Feed_-_Stops_20240216.csv')
+    bus_stops = pd.read_csv(
+        'data/ETS_Bus_Schedule_GTFS_Data_Feed_-_Stops_20240216.csv')
 
     start_time = [8]  # 8:30 AM
     time_range = 1440   # 45 minutes
     date_list = ['2024-02-14', '2024-02-15']
 
-    filtered_df = filter_dataframe_by_time(df, start_time, time_range, date_list)
+    filtered_df = filter_dataframe_by_time(
+        df, start_time, time_range, date_list)
     overview_df = aggregate_stop_data(filtered_df)
     overview_w_coords = merge_coordinates(overview_df, bus_stops)
 
     print(filtered_df)
-    #print(overview_w_coords)
+    # print(overview_w_coords)
 
-    export_to_csv(filtered_df, 'TIMEFILTER.csv')
+    export_to_csv(filtered_df, 'data/TIMEFILTER.csv')
 
-    #export_to_csv(overview_w_coords, 'OVERALL_TEST.csv')
+    # export_to_csv(overview_w_coords, 'OVERALL_TEST.csv')
 
 
 if __name__ == '__main__':

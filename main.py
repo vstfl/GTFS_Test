@@ -1,14 +1,13 @@
-from google.transit import gtfs_realtime_pb2
-from google.protobuf.json_format import MessageToDict
-from google.protobuf.json_format import MessageToJson
-from datetime import datetime, timezone
-import pytz
-import json
 import csv
-import pandas as pd
-from collections import OrderedDict
-import requests
+import json
 import time
+from datetime import datetime
+
+import pandas as pd
+import pytz
+import requests
+from google.protobuf.json_format import MessageToDict
+from google.transit import gtfs_realtime_pb2
 
 
 def read_pb(url):
@@ -37,7 +36,8 @@ def write_to_json(object, filename):
 
 def convert_posix_to_mst(posix_timestamp):
     # Convert POSIX timestamp to a datetime object in UTC
-    utc_datetime = datetime.utcfromtimestamp(posix_timestamp).replace(tzinfo=pytz.utc)
+    utc_datetime = datetime.utcfromtimestamp(
+        posix_timestamp).replace(tzinfo=pytz.utc)
 
     # Convert UTC datetime to MST
     mst_timezone = pytz.timezone("America/Denver")
@@ -118,7 +118,8 @@ def remove_duplicates_from_csv(csv_file_path):
         # Calculate the number of duplicates removed
         duplicate_count = initial_row_count - len(df)
 
-        print(f'{duplicate_count} duplicates removed from CSV file "{csv_file_path}" successfully.')
+        print(
+            f'{duplicate_count} duplicates removed from CSV file "{csv_file_path}" successfully.')
         return duplicate_count
 
     except FileNotFoundError:
@@ -138,10 +139,11 @@ def main():
     MBTA: https://github.com/mbta/gtfs-documentation/blob/master/reference/gtfs-realtime.md
     """
 
-    dict_obj = read_pb('http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb')
+    dict_obj = read_pb(
+        'http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb')
     lastUpdate = dict_obj["header"]["timestamp"]
     print(f'Last Update: {convert_posix_to_mst(int(lastUpdate))}')
-    #print(json.dumps(dict_obj["entity"][0],indent=4))
+    # print(json.dumps(dict_obj["entity"][0],indent=4))
 
     master = []
 
@@ -159,16 +161,16 @@ def main():
                 delay = departure.get("delay", 0)
             master.append(create_dict(eid, routeid, stopid, delay, lastUpdate))
 
-    #print(json.dumps(master, indent=4))
+    # print(json.dumps(master, indent=4))
 
-    #write_to_json(master, 'master')
-    #write_csv_from_dict_list(master, 'master_converted')
+    # write_to_json(master, 'master')
+    # write_csv_from_dict_list(master, 'master_converted')
 
-    #write_to_json(dict_obj, 'hum')
+    # write_to_json(dict_obj, 'hum')
 
-    append_dict_list_to_csv(master, 'master_converted.txt')
+    append_dict_list_to_csv(master, 'data/master_converted.txt')
 
-    remove_duplicates_from_csv('master_converted.txt')
+    remove_duplicates_from_csv('data/master_converted.txt')
 
 
 if __name__ == '__main__':
