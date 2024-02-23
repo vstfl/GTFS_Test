@@ -32,5 +32,5 @@ def check_duplicates(csv_file_path):
 
 if __name__ == '__main__':
 
-    csv_file_path = 'data/final_csv.txt'  # Replace with your CSV file path
+    csv_file_path = 'data/final_csv.csv'  # Replace with your CSV file path
     check_duplicates(csv_file_path)

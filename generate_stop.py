@@ -182,11 +182,11 @@ def main():
     input file can and should include as much data as possible
     (i.e. 1 whole day, or 1 whole week)
     """
-    obj = create_dict_from_csv('data/master_converted.txt')
-    # export_dict_to_csv(obj,'test_dict.txt')
+    obj = create_dict_from_csv('data/master_converted.csv')
+    # export_dict_to_csv(obj,'test_dict.csv')
     aggregated_result = average_delay_by_id2(obj)
-    # export_dict_to_json(aggregated_result, 'test_dict.txt')
-    convert_dict_to_csv(aggregated_result, 'data/final_csv.txt')
+    # export_dict_to_json(aggregated_result, 'test_dict.csv')
+    convert_dict_to_csv(aggregated_result, 'data/final_csv.csv')
 
 
 if __name__ == '__main__':

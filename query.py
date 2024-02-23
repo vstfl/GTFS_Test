@@ -113,7 +113,7 @@ def export_to_csv(df, file_path):
 
 
 def main():
-    file_path = 'data/final_csv.txt'
+    file_path = 'data/final_csv.csv'
 
     df = pd.read_csv(file_path, delimiter=',')
     bus_stops = pd.read_csv(

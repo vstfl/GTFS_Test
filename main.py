@@ -25,11 +25,11 @@ def read_pb(url):
 
 def write_to_json(object, filename):
     """
-    Write dict into a json formatted .txt file (large)
+    Write dict into a json formatted .json file (large)
     :param dict_obj:
     :return:
     """
-    file_path = f"{filename}.txt"
+    file_path = f"{filename}.json"
     with open(file_path, 'w') as file:
         json.dump(object, file, indent=4)
 
@@ -60,7 +60,7 @@ def create_dict(id, routeid, stopid, delay, lastupdate):
 
 def write_csv_from_dict_list(data, filename):
 
-    file_path = f"{filename}.txt"
+    file_path = f"{filename}.csv"
 
     if not data:
         print("Data is empty")
@@ -174,9 +174,8 @@ def main():
 
     # write_to_json(dict_obj, 'hum')
 
-    append_dict_list_to_csv(master, 'data/master_converted.txt')
-
-    remove_duplicates_from_csv('data/master_converted.txt')
+    append_dict_list_to_csv(master, 'data/master_converted.csv')
+    remove_duplicates_from_csv('data/master_converted.csv')
 
 
 if __name__ == '__main__':
