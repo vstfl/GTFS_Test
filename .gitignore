@@ -1,2 +1,4 @@
 .venv
 *.parquet
+__pycache__
+mean-stop.csv
