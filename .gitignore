@@ -2,3 +2,12 @@
 *.parquet
 __pycache__
 mean-stop.csv
+network-by-day.csv
+network-by-day-by-hour.csv
+560-shapes.csv
+25527827-2-stops.csv
+25527796-2-stops.csv
+25527777-2-stops.csv
+1899-560-by-day.csv
+1899-560-by-hour.csv
+1899-by-route.csv

@@ -7,6 +7,7 @@ from .compute import load_or_compute
 from . import trips
 from . import compute
 
+
 def get_dfs_from_glob(glob_str: str):
     dfs = [
         pl.read_csv(i, dtypes={'stopid': pl.Utf8, 'routeid': pl.Utf8})
@@ -39,6 +40,7 @@ def load_aggregate_data():
         lambda: aggregate_raw_data(load_raw_data())
     )
 
+
 def add_coords(df: pl.DataFrame, stops: pl.DataFrame):
     return (
         df.with_columns(pl.col('stopid').cast(pl.Utf8))
@@ -62,6 +64,8 @@ def aggregate_raw_data(df: pl.DataFrame):
         )
         # Get only the weekdays (6 = saturday, 7 = sunday)
         .filter(pl.col('day') < 6)
+        # Remove snowstorm stuff
+        .filter(pl.col('date').cast(pl.Utf8) > '2024-03-03')
         .sort('lastupdate')
         .group_by('id', 'stopid', 'date', 'period')
         .agg(
@@ -99,6 +103,7 @@ def plot_stop(dfs: pl.DataFrame, stopid: str, max_delay=MAX_DELAY):
     )
     sb.scatterplot(cats, x='lastupdate', y='delay', hue='id')
 
+
 def agg_group(df: pl.DataFrame, *groups: str):
     return (
         df.group_by(groups)
@@ -111,6 +116,7 @@ def agg_group(df: pl.DataFrame, *groups: str):
         )
         .sort(groups)
     )
+
 
 def select_stop(df: pl.DataFrame, stopid: str):
     return (
@@ -129,6 +135,7 @@ def select_stop_and_route(df: pl.DataFrame, stopid: str, routeid: str):
         .pipe(agg_group, 'day', 'hour')
         .drop('lastupdate')
     )
+
 
 def load_trips_df(path='data/trips.json', pq_path='data/trips.parquet'):
     def load():
