@@ -1,9 +1,11 @@
-from typing import Callable
 import polars as pl
 from glob import glob
-import os
 import seaborn as sb
 
+from .compute import load_or_compute
+
+from . import trips
+from . import compute
 
 def get_dfs_from_glob(glob_str: str):
     dfs = [
@@ -11,15 +13,6 @@ def get_dfs_from_glob(glob_str: str):
         for i in glob(glob_str)
     ]
     return pl.concat(dfs, how='vertical').unique()
-
-
-def load_or_compute(file: str, func: Callable[[], pl.DataFrame]):
-    if not os.path.exists(file):
-        df = func()
-        df.write_parquet(file)
-        return df
-    else:
-        return pl.read_parquet(file)
 
 
 def load_raw_data():
@@ -137,15 +130,14 @@ def select_stop_and_route(df: pl.DataFrame, stopid: str, routeid: str):
         .drop('lastupdate')
     )
 
-def load_trips_df():
-    print('lmao')
+def load_trips_df(path='data/trips.json', pq_path='data/trips.parquet'):
     def load():
         import json
         return (
-            pl.DataFrame(json.load(open('data/trips.json')))
+            pl.DataFrame(json.load(open(path)))
             # Trim JSON data according to the assumptions
             .with_columns(pl.col('geometry_line').struct.field('coordinates'))
             .with_columns(pl.col('coordinates').list.get(0))
             .drop('geometry_line')
         )
-    return load_or_compute('data/trips.parquet', load)
+    return load_or_compute(pq_path, load)
