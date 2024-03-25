@@ -109,7 +109,7 @@ def agg_group(df: pl.DataFrame, *groups: str):
         df.group_by(groups)
         .agg(
             pl.col('meandelay').mean().alias('avgdelay'),
-            pl.col('meandelay').max().alias('maxdelay'),
+            pl.col('meandelay').std().alias('stddelay'),
             pl.col('id').len().alias('numtrips'),
             pl.col('count').sum(),
             pl.col('lastupdate')
