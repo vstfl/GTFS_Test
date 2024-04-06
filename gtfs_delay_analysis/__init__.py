@@ -43,8 +43,13 @@ def load_aggregate_data():
 
 def add_coords(df: pl.DataFrame, stops: pl.DataFrame):
     return (
-        df.with_columns(pl.col('stopid').cast(pl.Utf8))
-        .join(stops.select(lat='stop_lat', lon='stop_lon', stopid='stop_id'), on='stopid', how='left')
+        df
+        .with_columns(pl.col('stopid').cast(pl.Utf8))
+        .join(
+            stops.select(lat='stop_lat', lon='stop_lon', stopid='stop_id'),
+            on='stopid',
+            how='left',
+        )
     )
 
 
