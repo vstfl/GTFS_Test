@@ -1,3 +1,5 @@
 #!/bin/sh
 
-jq '.cells |= map(.execution_count = null | .outputs = [])' $1 | sponge $1
+for i in $@; do
+    jq '.cells |= map(.execution_count = null | .outputs = [])' $i | sponge $i
+done
