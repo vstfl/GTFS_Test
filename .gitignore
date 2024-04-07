@@ -1,5 +1,6 @@
 .venv
 *.parquet
+!stop-sequences.parquet
 __pycache__
 mean-stop.csv
 network-by-day.csv

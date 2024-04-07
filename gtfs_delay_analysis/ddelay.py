@@ -34,11 +34,11 @@ def get_ddelay(df: pl.DataFrame):
 
 def plot_ddelay(df: pl.DataFrame, title: Optional[str] = None):
     ax = sb.barplot(df, x='line', y='ddelay')
-    ax.set_xticks(ax.get_xticks(), df['line'], rotation=60)
+    ax.set_xticks(ax.get_xticks(), df['line'], rotation=90)
     if title:
         ax.set_title(title)
 
 
 def plot_mean(df: pl.DataFrame):
     ax = sb.lineplot(df, x='stopid', y='meandelay')
-    ax.set_xticks(ax.get_xticks(), df['stopid'], rotation=60)
+    ax.set_xticks(ax.get_xticks(), df['stopid'], rotation=90)
