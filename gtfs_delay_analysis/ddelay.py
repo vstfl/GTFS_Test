@@ -19,11 +19,6 @@ def get_ddelay(df: pl.DataFrame):
         .select(
             a_id='stopid_right',
             b_id='stopid',
-            a_lon='stop_lon_right',
-            a_lat='stop_lat_right',
-            b_lon='stop_lon',
-            b_lat='stop_lat',
-            shapeid='shape_id',
             trip_id='trip_id',
             ddelay='ddelay',
         )
