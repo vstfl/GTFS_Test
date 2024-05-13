@@ -22,7 +22,7 @@ def load_raw_data():
     # Save into a more compact form for easier retrieval later
 
     return load_or_compute(
-        'raw.parquet',
+        'data/raw.parquet',
         lambda: get_dfs_from_glob('raw_data/raw_trip_*').unique()
     ).cast({
         # Save memory by re-using strings for categorical data
